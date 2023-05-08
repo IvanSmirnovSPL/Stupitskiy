@@ -38,10 +38,10 @@ def calculate(params: InitParams):
     # plt.plot(r[20][:-1], p[20], '-o', label='20')
     # plt.plot(r[40][:-1], p[40], '-o', label='40')
     # plt.plot(r[-1][:-1], p[-1], '-o', label='-1')
-    plt.plot(r[0], u[0], 'o', label='0')
+    plt.plot(r[0][:-1], rho[0], '-o', label='0')
     #plt.plot(range(params.N + 1), r[1 * r.shape[0] // 4], 'o', label='1 / 4')
     #plt.plot(range(params.N + 1), r[3 * r.shape[0] // 4], 'o', label='3 / 4')
-    plt.plot(r[-1], u[-1], 'o', label='-1')
+    plt.plot(r[-1][:-1], rho[-1], '-o', label='4')
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -50,8 +50,8 @@ def calculate(params: InitParams):
 def update_u(u: NDArray, r: NDArray, p: NDArray, params: InitParams):
     res = np.zeros(params.N + 1)
     res[0] = 0
-    for j in range(1, params.N - 1):
-        res[j] = u[j] - (params.dt / params.m) * r[j]**2 * (p[j + 1] - p[j])
+    for j in range(1, params.N):
+        res[j] = u[j] - (params.dt / params.m) * r[j]**2 * (p[j] - p[j - 1])
     res[-1] = u[-1] + (params.dt / params.m) * r[-1]**2 * p[-1]
     return res
 

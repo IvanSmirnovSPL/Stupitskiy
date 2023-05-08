@@ -7,9 +7,9 @@ class InitParams:
     path: Path
     a: float
     U: float
-    dt: float = 1e-4
+    dt: float = 1e-5
     N: int = 100
-    time_iter: int = 100
+    time_iter: int = 28000
     gamma: float = 5 / 3
 
     @property
