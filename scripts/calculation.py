@@ -44,9 +44,9 @@ def calculate(params: InitParams):
 def update_u(u: NDArray, r: NDArray, p: NDArray, params: InitParams):
     res = np.zeros(params.N + 1)
     res[0] = 0
-    for j in range(1, params.N - 1):
-        res[j] = u[j] - (params.dt / params.m) * r[j] * (p[j + 1] - p[j])
-    res[-1] = u[-1] + (params.dt / params.m) * r[-1] * p[-1]
+    for j in range(1, params.N):
+        res[j] = u[j] - (params.dt / params.m) * r[j]**2 * (p[j] - p[j - 1])
+    res[-1] = u[-1] + (params.dt / params.m) * r[-1]**2 * p[-1]
     return res
 
 

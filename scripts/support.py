@@ -9,7 +9,7 @@ class InitParams:
     U: float
     dt: float = 1e-4
     N: int = 100
-    time_iter: int = 50
+    time_iter: int = 50000
     gamma: float = 5 / 3
 
     @property
