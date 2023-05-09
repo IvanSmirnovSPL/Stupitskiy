@@ -28,22 +28,39 @@ def calculate(params: InitParams):
         r[n] = update_r(r=r[n - 1], u=u[n - 1], params=params)
         rho[n] = update_rho(r=r[n], params=params)
         p[n] = update_p(rho=rho[n], params=params)
-    # plt.plot(r[0][:-1], p[0], '-o', label='0')
-    # plt.plot(r[20][:-1], p[20], '-o', label='20')
-    # plt.plot(r[40][:-1], p[40], '-o', label='40')
-    # plt.plot(r[-1][:-1], p[-1], '-o', label='-1')
-    plt.plot(range(params.N + 1), r[0], 'o', label='0')
-    plt.plot(range(params.N + 1), r[1 * r.shape[0] // 4], 'o', label='1 / 4')
-    plt.plot(range(params.N + 1), r[3 * r.shape[0] // 4], 'o', label='3 / 4')
-    plt.plot(range(params.N + 1), r[-1], 'o', label='-1')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+
+    #times = [0, 4e-4, 8e-4, 1.2e-3, 1.6e-3, 2e-3, 2.4e-3, 2.8e-3]
+    times = [0, 0.04, 0.08, 0.12, 0.16, 0.2]
+    nums = [int(_t / params.dt) for _t in times]
+
+    fig = plt.figure(figsize=(30, 15))
+    ax = fig.subplots(1, 3)
+
+    for idx, _n in enumerate(nums):
+        ax[1].plot(r[_n], u[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[1].legend()
+        ax[1].grid(True)
+        ax[1].set_title('u')
+
+        ax[2].plot(r[_n][:-1], p[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[2].legend()
+        ax[2].grid(True)
+        ax[2].set_title('p')
+
+        ax[0].plot(r[_n][:-1], rho[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[0].legend()
+        ax[0].grid(True)
+        ax[0].set_title(r'$\rho$')
+
+    fig.suptitle(f'$a_0 = {params.a}, U_0 = {params.U}$')
+    plt.savefig(str(params.path / f'a_{params.a}, U_{params.U}.png'))
+
+
 
 
 def update_u(u: NDArray, r: NDArray, p: NDArray, params: InitParams):
     res = np.zeros(params.N + 1)
-    res[0] = 0
+    res[0] = u[0] - (params.dt / params.m) * r[-1]**2 * p[0]
     for j in range(1, params.N):
         res[j] = u[j] - (params.dt / params.m) * r[j]**2 * (p[j] - p[j - 1])
     res[-1] = u[-1] + (params.dt / params.m) * r[-1]**2 * p[-1]
