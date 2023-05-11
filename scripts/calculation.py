@@ -4,6 +4,24 @@ from numpy.typing import NDArray
 from matplotlib import pyplot as plt
 
 
+LINEWIDTH = 5
+FONTSIZE=2
+
+# Set the default text font size
+plt.rc('font', size=16 * FONTSIZE)
+# Set the axes title font size
+plt.rc('axes', titlesize=16 * FONTSIZE)
+# Set the axes labels font size
+plt.rc('axes', labelsize=16 * FONTSIZE)
+# Set the font size for x tick labels
+plt.rc('xtick', labelsize=16 * FONTSIZE)
+# Set the font size for y tick labels
+plt.rc('ytick', labelsize=16 * FONTSIZE)
+# Set the legend font size
+plt.rc('legend', fontsize=10 * FONTSIZE)
+# Set the font size of the figure title
+plt.rc('figure', titlesize=20 * FONTSIZE)
+
 def calc_init_r(params: InitParams):
     r = np.zeros(params.N + 1)
     r[0] = params.a
@@ -36,24 +54,30 @@ def calculate(params: InitParams):
     fig = plt.figure(figsize=(30, 15))
     ax = fig.subplots(1, 3)
 
+    paths = []
+
     for idx, _n in enumerate(nums):
-        ax[1].plot(r[_n], u[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[1].plot(r[_n], u[_n], '-', label=f'{"%.1e" % times[idx]}', lw=LINEWIDTH)
         ax[1].legend()
         ax[1].grid(True)
         ax[1].set_title('u')
 
-        ax[2].plot(r[_n][:-1], p[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[2].plot(r[_n][:-1], p[_n], '-', label=f'{"%.1e" % times[idx]}', lw=LINEWIDTH)
         ax[2].legend()
         ax[2].grid(True)
         ax[2].set_title('p')
 
-        ax[0].plot(r[_n][:-1], rho[_n], '-', label=f'{"%.1e" % times[idx]}')
+        ax[0].plot(r[_n][:-1], rho[_n], '-', label=f'{"%.1e" % times[idx]}', lw=LINEWIDTH)
         ax[0].legend()
         ax[0].grid(True)
         ax[0].set_title(r'$\rho$')
 
-    fig.suptitle(f'$a_0 = {params.a}, U_0 = {params.U}$')
-    plt.savefig(str(params.path / f'a_{params.a}, U_{params.U}.png'))
+
+    name = str(f'U_{params.U}, a_{params.a}')
+    fig.suptitle(name)
+    plt.savefig(params.path / f'{name}.png')
+
+
 
 
 
